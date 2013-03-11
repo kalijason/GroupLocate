@@ -28,13 +28,11 @@ public class GroupLocateCommandExecutor implements CommandExecutor {
 
 	GroupLocateCommandExecutor() {
 		helpMsg = new String[7];
-		helpMsg[0] = "Welcome to the LagLocate Help System";
+		helpMsg[0] = "Welcome to the GroupLocate Help System";
 		helpMsg[1] = "Usage:";
-		helpMsg[2] = "  /LagLocate <distance> [items|creatures|all] [(true|false)tp]";
-		helpMsg[3] = "    Returns the coordinates of the largest stack of found";
-		helpMsg[4] = "    [items|creatures|all] (default: items) in the loaded chunks,";
-		helpMsg[5] = "    within <distance> blocks of each other.";
-		helpMsg[6] = "    Optionally teleports you there. (default: false)";
+		helpMsg[2] = "  /gl [items|creatures|...] <distance>";
+		helpMsg[3] = "  /gl tp <position>";
+
 
 		lastLocations = new ArrayList<Location>();
 	}

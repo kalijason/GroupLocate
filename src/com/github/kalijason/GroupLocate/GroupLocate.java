@@ -9,12 +9,12 @@ public class GroupLocate extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        getLogger().info("Enabled LagLocate");
-        getCommand("LagLocate").setExecutor(new GroupLocateCommandExecutor());
+        getLogger().info("Enabled GroupLocate");
+        getCommand("GroupLocate").setExecutor(new GroupLocateCommandExecutor());
     }
 
     @Override
     public void onDisable() {
-        getLogger().info("Disabled LagLocate");
+        getLogger().info("Disabled GroupLocate");
     }
 }
