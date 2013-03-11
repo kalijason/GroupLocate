@@ -1,0 +1,29 @@
+name: GroupLocate
+description: Helps locate group of entities
+version: 1.0
+author: kalijason <kalijason@gmail.com>
+website: http://wait.tw
+
+main: com.github.kalijason.GroupLocate.GroupLocate
+
+commands:
+  GroupLocate:
+    description: This provides access to all of the GroupLocate functionality.
+    usage: Syntax Error! /<command> for help.
+    permission: GroupLocate.locate
+    permission-message: You don't have <permission>
+    aliases: [gl]
+
+permissions:
+  GroupLocate.admin:
+    description: Grants access to all of GroupLocate's commands.
+    default: op
+    children:
+      GroupLocate.locate: true
+      GroupLocate.teleport: true
+  GroupLocate.locate:
+    description: Allows users to locate groups.
+    default: false
+  GroupLocate.teleport:
+    description: Allows users to teleport to the groups
+    default: false
