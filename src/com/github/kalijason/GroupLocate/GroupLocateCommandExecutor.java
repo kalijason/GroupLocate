@@ -39,7 +39,7 @@ public class GroupLocateCommandExecutor implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		if (cmd.getName().equalsIgnoreCase("LagLocate")) {
+		if (cmd.getName().equalsIgnoreCase("GroupLocate")) {
 			if (args.length == 0) {
 				sender.sendMessage(helpMsg);
 				return true;
@@ -87,7 +87,7 @@ public class GroupLocateCommandExecutor implements CommandExecutor {
 							type = "item";
 						}
 
-						sender.sendMessage("Searching for lag inducing setups:");
+						sender.sendMessage("Searching for groups:");
 						sender.sendMessage("  Distance: " + distance);
 						sender.sendMessage("  Type: " + type);
 
