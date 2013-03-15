@@ -2,6 +2,7 @@ package com.github.kalijason.GroupLocate;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -24,15 +25,16 @@ public class GroupLocateCommandExecutor implements CommandExecutor {
 	boolean tp;
 	String type;
 
+	final int MAX_RESULT = 5;
+
 	ArrayList<Location> lastLocations;
 
 	GroupLocateCommandExecutor() {
-		helpMsg = new String[7];
+		helpMsg = new String[4];
 		helpMsg[0] = "Welcome to the GroupLocate Help System";
 		helpMsg[1] = "Usage:";
 		helpMsg[2] = "  /gl [items|creatures|...] <distance>";
 		helpMsg[3] = "  /gl tp <position>";
-
 
 		lastLocations = new ArrayList<Location>();
 	}
@@ -77,9 +79,11 @@ public class GroupLocateCommandExecutor implements CommandExecutor {
 						if (args.length > 1) {
 							type = args[0];
 
-							if (!type.toLowerCase().contains("item") && !type.toLowerCase().contains("creature") && !type.toLowerCase().contains("monster")
-									&& !type.toLowerCase().contains("animals") && !type.toLowerCase().contains("villager")
-									&& !type.toLowerCase().contains("all") && !type.toLowerCase().contains("player")) {
+							if (!type.toLowerCase().contains("item") && !type.toLowerCase().contains("creature")
+									&& !type.toLowerCase().contains("monster")
+									&& !type.toLowerCase().contains("animals")
+									&& !type.toLowerCase().contains("villager") && !type.toLowerCase().contains("all")
+									&& !type.toLowerCase().contains("player")) {
 								sender.sendMessage("Invalid type.");
 								return false;
 							}
@@ -92,10 +96,17 @@ public class GroupLocateCommandExecutor implements CommandExecutor {
 						sender.sendMessage("  Type: " + type);
 
 						Player commandSender = Bukkit.getPlayer(sender.getName());
-						List<Entity> entities = commandSender.getWorld().getEntities();
-						sender.sendMessage("  Total Entities:" + entities.size());
+						// get where the world commandSend at
+						World targetWorld = commandSender.getWorld();
+						// if it's from console, then get default world
+						if (targetWorld == null) {
+							targetWorld = Bukkit.getServer().getWorlds().get(0);
+						}
 
-						List<Entity> nearEntities;
+						// get all entities on the selected world.
+						List<Entity> entities = targetWorld.getEntities();
+
+						sender.sendMessage("  Total Entities:" + entities.size());
 
 						// determine type
 						Class<?> classType = getEntityType(type);
@@ -105,6 +116,7 @@ public class GroupLocateCommandExecutor implements CommandExecutor {
 						sender.sendMessage("  Filtered Entities:" + filteredEntities.size());
 
 						// construct the list of groups (centers)
+						List<Entity> nearEntities;
 						ArrayList<EntityGroup> list = new ArrayList<EntityGroup>();
 						for (Entity entity : filteredEntities) {
 							// find neighbors of this entity
@@ -120,8 +132,7 @@ public class GroupLocateCommandExecutor implements CommandExecutor {
 						}
 
 						// search group
-						final int maxResult = 5;
-						for (int i = 1; i <= maxResult; i++) {
+						for (int i = 1; i <= MAX_RESULT; i++) {
 							// sort to fetch top
 							Collections.sort(list, new EntityGroupComparable());
 
@@ -131,8 +142,10 @@ public class GroupLocateCommandExecutor implements CommandExecutor {
 								int clusterSize = e.getSize() + 1;
 								if (clusterSize > 0) {
 									lastLocations.add(e.getCenter().getLocation().clone());
-									sender.sendMessage(i + ") size:(" + clusterSize + ") X: " + e.getCenter().getLocation().getBlockX() + " Y: "
-											+ e.getCenter().getLocation().getBlockY() + " Z: " + e.getCenter().getLocation().getBlockZ());
+									sender.sendMessage(i + ") size:(" + clusterSize + ") X: "
+											+ e.getCenter().getLocation().getBlockX() + " Y: "
+											+ e.getCenter().getLocation().getBlockY() + " Z: "
+											+ e.getCenter().getLocation().getBlockZ());
 								}
 								// remove duplication in neighbors
 								removeDuplications(e.getNeighbors(), list);
